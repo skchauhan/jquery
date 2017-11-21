@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Autocomplete - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
+
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $(document).ready(function() {
+  	
+   var json = [{"id":7,"name":"ankur","customer_name":"liliol","started_date":"2017-11-20","credit_limit":"98","balance_outstand":"kljkl","credit_alert":89,"sales_rep":1,"cust_status":"deactive","comments":"jk,kj,k,","created_at":"2017-11-21 07:11:43","updated_at":"2017-11-21 07:11:43"},{"id":6,"name":"amit","customer_name":"jyujyj","started_date":"2017-11-24","credit_limit":"52","balance_outstand":"jtyju","credit_alert":3423,"sales_rep":1,"cust_status":"active","comments":"jyujyuj","created_at":"2017-11-21 07:10:50","updated_at":"2017-11-21 07:10:50"}];
+
+
+	function imAutocompleteJSONParse(data) {
+	    var rows = [];
+	    var rowData = null;
+	    var dataLength = data.length;
+	    for (var i = 0; i < dataLength; i++) {
+	        rowData = data[i];
+	        rows[i] = {
+	            label: rowData.name,
+	            value: rowData.id
+	        };
+	    }
+	    return rows;
+	}
+
+
+// console.log(json);
+
+    $( "#tags" ).autocomplete({
+	 	source: function(request, response) {
+	        var rows = imAutocompleteJSONParse(json);
+	        console.log(response(rows));
+	        return response(rows);
+	    },
+	    // minLength: 2
+
+	    // minLength:1,
+	    select: function( event, ui ) {
+	    	// console.log(ui);
+	        // $( '#id_city' ).val( ui.item.value );                  
+	        console.log(ui.item.value);
+	    }
+	});
+  });
+  </script>
+</head>
+<body>
+ 
+<div class="ui-widget">
+  <label for="tags">Tags: </label>
+  <input id="tags">
+</div>
+ 
+
+
+ <?php 
+ echo json_encode(array(array('id'=>1, 'value'=>'sunil'), array('id'=>3, 'value'=>'anil'), array('id'=>4, 'value'=>'ankur'), array('id'=>4, 'value'=>'amit')));
+  ?>
+ 
+</body>
+</html>
