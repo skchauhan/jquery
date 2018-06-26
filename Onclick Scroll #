@@ -1,0 +1,15 @@
+jQuery('body').on('click', 'a#service_top', function() {
+ 
+    var $this = jQuery(this),
+    href = $this.attr('href');
+ 
+    if(!href || href.charAt(0) !== '#') return;
+    var el = jQuery(href);
+ 
+    if(!el.length) el = jQuery('a[name=' + href.substring(1, href.length) + ']');
+    if(!el.length) return;
+ 
+    jQuery('html, body').animate({scrollTop: el.offset().top }, 1000);
+    return false;
+ 
+});
