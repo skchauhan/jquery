@@ -1,0 +1,76 @@
+First only clone select value & second remove previous select option before append
+
+1) 
+<select name="ddlFruits" id="ddlFruits">
+    <option value="0">Please Select</option>
+    <option value="1">Mango</option>
+    <option value="2">Apple</option>
+    <option value="3">Banana</option>
+    <option value="4">Orange</option>
+</select>
+<br />
+<br />
+<input type="button" id="btnClone" value="Clone" />
+<hr />
+<div id="container">
+</div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#btnClone").bind("click", function () {
+ 
+            var index = $("#container select").length + 1;
+ 
+            //Clone the DropDownList
+            var ddl = $("#ddlFruits").clone();
+ 
+            //Set the ID and Name
+            ddl.attr("id", "ddlFruits_" + index);
+            ddl.attr("name", "ddlFruits_" + index);
+ 
+            //[OPTIONAL] Copy the selected value
+            var selectedValue = $("#ddlFruits option:selected").val();
+            ddl.find("option[value = '" + selectedValue + "']").attr("selected", "selected");
+ 
+            //Append to the DIV.
+            $("#container").append(ddl);
+            $("#container").append("<br /><br />");
+        });
+    });
+</script>
+
+
+2) 
+
+<select name="SelectService" class="selService">
+<option value="1">Some service</option>
+<option value="2">Another one</option>
+<option value="3">three more</option>
+<option value="4">four more</option>
+<option value="5">five more</option>
+<option value="6">six more</option>
+</select>
+
+<a id="clone">Clone</a>
+
+<div id="target">
+</div>
+
+<hr />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+$('#clone').click(function() {
+    var original = $('select.selService:eq(0)');
+    var allSelects = $('select.selService');
+    var clone = original.clone();
+    
+    $('option', clone).filter(function(i) {
+        return allSelects.find('option:selected[value="' + $(this).val() + '"]').length;
+    }).remove();
+    
+    $('#target').append(clone).append('<br />');
+});
+    });
+</script>
