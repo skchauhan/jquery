@@ -1,0 +1,71 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+var localCache = {
+    data: {},
+    remove: function (url) {
+        delete localCache.data[url];
+    },
+    //a cached version exists
+    exist: function (url) {
+        return !!localCache.data[url] && ((new Date().getTime() - localCache.data[url]._) < localCache.timeout);
+    },
+    get: function (url) {
+        console.log('Getting in cache for url' + url); //log only!
+        return localCache.data[url].data;
+    },
+    set: function (url, cachedData, callback) {
+        localCache.remove(url);
+        localCache.data[url] = {
+            _: new Date().getTime(),
+            data: cachedData
+        };
+        if ($.isFunction(callback)) callback(cachedData);
+    },
+    timeout: 900000, //in seconds
+};
+
+$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+    if (options.cache) {
+        var complete = originalOptions.complete || $.noop,
+            url = originalOptions.url;
+        //remove jQuery cache as you have your own localCache
+        options.cache = false;
+        options.beforeSend = function () {
+            if (localCache.exist(url)) {
+                complete(localCache.get(url));
+                return false;
+            }
+            return true;
+        };
+        options.complete = function (data, textStatus) {
+            localCache.set(url, data, complete);
+        };
+    }
+});
+
+    $(function () {
+    var url = 'curl.php';
+        $('#ajaxButton').click(function (e) {
+            $.ajax({
+                url: url,
+                data: {
+                    test: 'value'
+                },
+                cache: true,
+                complete: doSomething
+            });
+        });
+    });
+    //ToDo after ajax call finishes, or cached version retrived
+    function doSomething(data) {
+        console.log(data);
+    }
+
+
+
+    
+</script>
+
+<a id="ajaxButton">Click me</a>
